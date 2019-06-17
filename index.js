@@ -9,7 +9,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: secret, saveUninitialized: true, resave: true }));
 //app.set('views',"/storage/emulated/0/node/voting/views");
-app.set('views',"/voting/views");
+app.set('views',"/views");
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
