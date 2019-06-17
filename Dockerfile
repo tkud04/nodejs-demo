@@ -1,7 +1,7 @@
 FROM node:8.11.3-alpine as node
-WORKDIR /app
+WORKDIR /
 # COPY public ./public
-COPY src/index.js ./src/index.js
+#COPY src/index.js ./src/index.js
 COPY package*.json ./
 RUN npm install --progress=true --loglevel=silent
 # COPY src/client ./src/client/
