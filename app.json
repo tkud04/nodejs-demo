@@ -1,0 +1,12 @@
+{
+  "name": "NodeJSApp",
+  "description": "Demo app on NodeJS",
+  "repository": "",
+  "keywords": ["nodejs", "react"],
+  "stack": "heroku-16",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs"
+    }
+  ]
+}
