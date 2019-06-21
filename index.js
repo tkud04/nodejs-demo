@@ -11,14 +11,9 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
-   res.render('index');
-  })
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
-
-
-
-/**
+   let result = '';
+   
+   /************ RabbitMQ ************/
 // Create connection to AMQP server
 amqplib.connect(config.amqp, (err, connection) => {
      if (err) {
@@ -52,7 +47,7 @@ amqplib.connect(config.amqp, (err, connection) => {
                     contentType: 'application/json'
                 });
                 if (sent) {
-                	console.log('[x] sent: %s',JSON.stringify(content));
+                	result += '[x] sent: ' + JSON.stringify(content);
                     return next();
                 } else {
                     channel.once('drain', () => next());
@@ -71,7 +66,7 @@ amqplib.connect(config.amqp, (err, connection) => {
                 }
                 sent++;
                 sender({
-                    to: 'recipient@example.com',
+                    to: 'recipient-' + sent + '@example.com',
                     subject: 'Test message #' + sent,
                     text: 'hello world!'
                 }, sendNext);
@@ -88,4 +83,9 @@ amqplib.connect(config.amqp, (err, connection) => {
   }, 500);
   
 });
-**/
+        /************ RabbitMQ ************/
+   
+   
+   res.render('index',{result: result});
+  })
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
