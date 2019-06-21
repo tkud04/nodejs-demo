@@ -78,7 +78,7 @@ amqplib.connect(config.amqp, (err, connection) => {
                     contentType: 'application/json'
                 });
                 if (sent) {
-                	ret += '[x] sent: ' + JSON.stringify(content) .+ '\n';
+                	ret += '[x] sent: ' + JSON.stringify(content) + '\n';
                     return next();
                 } else {
                     channel.once('drain', () => next());
