@@ -1,46 +1,68 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const request = require('request');
-const app = express();
-const secret = 'jgfddhdDQ3$ADQFXS';
+'use strict';
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: secret, saveUninitialized: true, resave: true }));
-//app.set('views',"/storage/emulated/0/node/voting/views");
-app.set('views',"/views");
-app.set('view engine', 'ejs');
+const amqplib = require('amqplib/callback_api');
+const config = require('./config');
 
-app.get('/', function (req, res) {
-  res.render('index', {name: null, vote: null, error: null});
-});
+// Create connection to AMQP server
+amqplib.connect(config.amqp, (err, connection) => {
+    if (err) {
+        console.error(err.stack);
+        return process.exit(1);
+    }
 
-app.post('/', function(req,res){
-	let name = req.body.name;
-	let age = req.body.age;
-	let vote = req.body.vote;
-	let uu = "http://localhost/live/vote.php";
-	let sess = req.session;
-	
-	if(name == "" || age == "" || vote == ""){
-		sess.name = name; sess.age = age; sess.vote = vote; 
-		res.render('index',{error: "Please fill in the required fields"});
-	}
-	
-	else{
-		request(uu,function(err,response,body){
-		   if(err){
-			res.render('index',{name: null, vote: null, error: "An error occurred while processing your request"});
-		   }
-		
-		   else{
-			
-		   }
-		});
-	}
-});
+    // Create channel
+    connection.createChannel((err, channel) => {
+        if (err) {
+            console.error(err.stack);
+            return process.exit(1);
+        }
+        
+      // Ensure queue for messages
+        channel.assertQueue(config.queue, {
+            // Ensure that the queue is not deleted when server restarts
+            durable: true
+        }, err => {
+            if (err) {
+                console.error(err.stack);
+                return process.exit(1);
+            }
+            
+       // Create a function to send objects to the queue
+            // Javascript object is converted to JSON and then into a Buffer
+            let sender = (content, next) => {
+                let sent = channel.sendToQueue(config.queue, Buffer.from(JSON.stringify(content)), {
+                    // Store queued elements on disk
+                    persistent: true,
+                    contentType: 'application/json'
+                });
+                if (sent) {
+                	console.log('[x] sent: %s',JSON.stringify(content));
+                    return next();
+                } else {
+                    channel.once('drain', () => next());
+                }
+            };
 
-app.listen(3000, function () {
-  console.log('NodeJS app listening on port 3000!')
+            // push 100 messages to queue
+            let sent = 0;
+            let sendNext = () => {
+                if (sent >= 10) {
+                    console.log('All messages sent!');
+                    // Close connection to AMQP server
+                    // We need to call channel.close first, otherwise pending
+                    // messages are not written to the queue
+                    return channel.close(() => connection.close());
+                }
+                sent++;
+                sender({
+                    to: 'recipient@example.com',
+                    subject: 'Test message #' + sent,
+                    text: 'hello world!'
+                }, sendNext);
+            };
+
+            sendNext();
+
+        });
+    });
 });

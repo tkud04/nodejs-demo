@@ -1,0 +1,9 @@
+{
+  "amqp": "amqp://xymnicsq:FH5ve_xglSF_lYd3UF7-Cjw8E5ujCzY-@clam.rmq.cloudamqp.com/xymnicsq",
+  "queue": "nodemailer-amqp",
+
+  "server": {
+    "port": 5672,
+    "host": "192.168.42.172"
+  }
+}
