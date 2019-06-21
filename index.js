@@ -8,7 +8,43 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 let result = '';  
 
-/************ RabbitMQ ************/
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => {
+   result = publishTest();
+   res.render('index',{result: result});  
+  })
+  .get('/start-server', (req, res) => {
+   startServer();
+   res.render('start-server');
+  })
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+  
+  
+  function startServer()
+  {  	
+      const nd = spawn('node', ['receive.js']);
+
+      nd.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+      });
+
+     nd.stderr.on('data', (data) => {
+       console.log(`stderr: ${data}`);
+     });
+
+     nd.on('close', (code) => {
+       console.log(`child process exited with code ${code}`);
+     });
+  }
+  
+  function publishTest()
+  {
+  	let ret = '';
+  
+  	/************ RabbitMQ ************/
 // Create connection to AMQP server
 amqplib.connect(config.amqp, (err, connection) => {
      if (err) {
@@ -26,7 +62,7 @@ amqplib.connect(config.amqp, (err, connection) => {
       // Ensure queue for messages
         channel.assertQueue(config.queue, {
             // Ensure that the queue is not deleted when server restarts
-            durable: true
+            durable: false
         }, err => {
             if (err) {
                 console.error(err.stack);
@@ -37,19 +73,19 @@ amqplib.connect(config.amqp, (err, connection) => {
             // Javascript object is converted to JSON and then into a Buffer
             let sender = (content, next) => {
                 let sent = channel.sendToQueue(config.queue, Buffer.from(JSON.stringify(content)), {
-                    // Store queued elements on disk
-                    persistent: true,
+                    // Don't store queued elements on disk
+                    persistent: false,
                     contentType: 'application/json'
                 });
                 if (sent) {
-                	result += '[x] sent: ' + JSON.stringify(content);
+                	ret += '[x] sent: ' + JSON.stringify(content) .+ '\n';
                     return next();
                 } else {
                     channel.once('drain', () => next());
                 }
             };
 
-            // push 100 messages to queue
+            // push 10 messages to queue
             let sent = 0;
             let sendNext = () => {
                 if (sent >= 10) {
@@ -79,35 +115,4 @@ amqplib.connect(config.amqp, (err, connection) => {
   
 });
         /************ RabbitMQ ************/
-
-
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => {
-   res.render('index',{result: result});
-  })
-  .get('/start-server', (req, res) => {
-   startServer();
-   res.render('start-server');
-  })
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-  
-  
-  function startServer()
-  {  	
-      const nd = spawn('node', ['receive.js']);
-
-      nd.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-      });
-
-     nd.stderr.on('data', (data) => {
-       console.log(`stderr: ${data}`);
-     });
-
-     nd.on('close', (code) => {
-       console.log(`child process exited with code ${code}`);
-     });
   }
