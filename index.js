@@ -65,4 +65,10 @@ amqplib.connect(config.amqp, (err, connection) => {
 
         });
     });
+    
+    setTimeout(function() { 
+  connection.close(); 
+  process.exit(0) 
+  }, 500);
+  
 });
