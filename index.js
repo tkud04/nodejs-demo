@@ -2,10 +2,26 @@
 
 const amqplib = require('amqplib/callback_api');
 const config = require('./config');
+const express = require('express');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => {
+   res.render('index');
+  })
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+
+
+
+/**
 // Create connection to AMQP server
 amqplib.connect(config.amqp, (err, connection) => {
-    if (err) {
+     if (err) {
         console.error(err.stack);
         return process.exit(1);
     }
@@ -72,3 +88,4 @@ amqplib.connect(config.amqp, (err, connection) => {
   }, 500);
   
 });
+**/
