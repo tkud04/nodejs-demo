@@ -62,7 +62,7 @@ amqplib.connect(config.amqp, (err, connection) => {
       // Ensure queue for messages
         channel.assertQueue(config.queue, {
             // Ensure that the queue is not deleted when server restarts
-            durable: false
+            durable: true
         }, err => {
             if (err) {
                 console.error(err.stack);
