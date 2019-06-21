@@ -1,70 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Pactice</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
+<% include ../partials/head.ejs %>
+
 <div class="container-fluid">
 <div class="row">
 <div class="col-md-12">
-<h2 class="text-success text-center">Voting App Demo</h2>
-<form method="post" action="">
-<div class="row">
-<%
-let name = "", age = "", vote = "";
+<h2 class="text-success text-center">NodeJS Mailer using RabbitMQ</h2>
+<p>Queue messages will be displayed below:</p><br>
 
-if(req.name) name = req.name;
-if(req.age) age = req.age;
-if(req.vote) vote = req.vote;
-%>
-<div class="col-md-4">
-<div class="form-group">
-<label>Name</label>
-<input type="text" class="form-control" name="vname" value="<%= name %>" placeholder="Your name">
-</div>
-</div>
-<div class="col-md-4">
-<div class="form-group">
-<label>Age</label>
-<input type="text" class="form-control" name="age" value="<%= age %>" placeholder="Your age">
-</div>
-</div>
-<div class="col-md-4">
-<div class="form-group">
-<label>Your vote</label>
-<select class="form-control" name="vote" value="<%= vote %>">
-<option value="none">Select vote</option>
-<option value="ambode">Akinwunmi Ambode</option>
-<option value="sanwoolu">Babajide Sanwoolu</option>
-<option value="agbaje">Jimi Agbaje</option>
-</select>
-</div>
-</div>
-</div><br>
-<div class="row">
-<div class="col-md-12">
-<center><button class=" form-control btn btn-success">Submit</button></center>
-</div>
-</div>
-</form><br><br>
-<div class="row">
-<div class="col-md-12">
-<center>
-<% if(error !== null){ %>
-<p class="text-danger text-bold"><%= error %></p>
-<% } %>
-</center>
 </div>
 </div>
 </div>
-</div>
-</div>
-</body>
-  <script src="/js/jquery-2.2.4.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-      <script src="/js/bootstrap.min.js"></script>
-  </html>
+
+<% include ../partials/foot.ejs %>
