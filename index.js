@@ -2,6 +2,7 @@
 
 const amqplib = require('amqplib/callback_api');
 const config = require('./config');
+const { spawn } = require('child_process');
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
@@ -87,4 +88,26 @@ express()
   .get('/', (req, res) => {
    res.render('index',{result: result});
   })
+  .get('/start-server', (req, res) => {
+   startServer();
+   res.render('start-server');
+  })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+  
+  
+  function startServer()
+  {  	
+      const nd = spawn('node', ['receive.js']);
+
+      nd.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+      });
+
+     nd.stderr.on('data', (data) => {
+       console.log(`stderr: ${data}`);
+     });
+
+     nd.on('close', (code) => {
+       console.log(`child process exited with code ${code}`);
+     });
+  }
