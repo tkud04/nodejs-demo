@@ -5,15 +5,9 @@ const config = require('./config');
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
+let result = '';  
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => {
-   let result = '';
-   
-   /************ RabbitMQ ************/
+/************ RabbitMQ ************/
 // Create connection to AMQP server
 amqplib.connect(config.amqp, (err, connection) => {
      if (err) {
@@ -84,8 +78,13 @@ amqplib.connect(config.amqp, (err, connection) => {
   
 });
         /************ RabbitMQ ************/
-   
-   
+
+
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => {
    res.render('index',{result: result});
   })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
