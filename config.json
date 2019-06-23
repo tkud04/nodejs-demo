@@ -5,5 +5,11 @@
   "server": {
     "port": 5672,
     "host": "192.168.42.172"
+  },
+  "smtp": {
+    "port": 587,
+    "host": "smtp.gmail.com",
+    "user": "dunphydavid83@gmail.com",
+    "pass": "kudayisi2$"
   }
 }
