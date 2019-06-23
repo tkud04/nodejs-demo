@@ -5,6 +5,7 @@ const config = require('./config');
 const { spawn } = require('child_process');
 const express = require('express');
 const path = require('path');
+const nodemailer = require("nodemailer");
 const PORT = process.env.PORT || 5000;
 let result = '';  
 
