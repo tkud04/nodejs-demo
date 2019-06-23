@@ -14,8 +14,8 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
-  let dt = {receivers: "kkudayisitobi@gmail.com, kudayisitobi@gmail.com",
-                 subject: "Nodemailer says HI ?", 
+  let dt = {receivers: "kkudayisitobi@gmail.com, aquarius4tkud@yahoo.com",
+                 subject: "Nodemailer says HI", 
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                };
@@ -50,7 +50,7 @@ express()
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Mail Ninja ??" <support@mailninja.com>', // sender address
+    from: '"Mail Ninja" <support@mailninja.com>', // sender address
     to: data.receivers, // list of receivers
     subject: data.subject, // Subject line
     text: data.text_body, // plain text body
@@ -60,5 +60,5 @@ express()
   console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-  resolve({"status": "ok"});
+  resolve({"status": "ok","msg-id": info.messageId});
   }
