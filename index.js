@@ -29,7 +29,7 @@ express()
   async function sendMail(data)
   {  	
       //let ret = JSON.parse(data);
-      console.log(ret);
+      console.log(data);
       //return ret;
       
         // Generate test SMTP service account from ethereal.email
