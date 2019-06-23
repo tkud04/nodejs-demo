@@ -19,7 +19,7 @@ express()
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                };
   
-  result = sendMail(data).catch(console.error);
+  result = sendMail.catch(console.error);
    res.render('index',{result: result});  
   })
   
