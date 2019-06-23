@@ -21,8 +21,8 @@ express()
                };
   let result = 'Untouched';
   
-  result = sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch(console.error);
-   res.render('index',{result: result});  
+  sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch(console.error);
+   //res.render('index',{result: result});  
   })
   
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
