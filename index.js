@@ -13,106 +13,16 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
-   result = publishTest();
+  let data = "{'em':'kudayisitobi@gmail.com','title':'Nodemailer says HI','content':'<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>'}";
+  result = sendMail(data);
    res.render('index',{result: result});  
   })
-  .get('/start-server', (req, res) => {
-   startServer();
-   res.render('start-server');
-  })
+  
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
   
   
-  function startServer()
+  function sendMail(data)
   {  	
-      const nd = spawn('node', ['receive.js']);
-
-      nd.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-      });
-
-     nd.stderr.on('data', (data) => {
-       console.log(`stderr: ${data}`);
-     });
-
-     nd.on('close', (code) => {
-       console.log(`child process exited with code ${code}`);
-     });
-  }
-  
-  function publishTest()
-  {
-  	let ret = '';
-  
-  	/************ RabbitMQ ************/
-// Create connection to AMQP server
-amqplib.connect(config.amqp, (err, connection) => {
-     if (err) {
-        console.error(err.stack);
-        return process.exit(1);
-    }
-
-    // Create channel
-    connection.createChannel((err, channel) => {
-        if (err) {
-            console.error(err.stack);
-            return process.exit(1);
-        }
-        
-      // Ensure queue for messages
-        channel.assertQueue(config.queue, {
-            // Ensure that the queue is not deleted when server restarts
-            durable: true
-        }, err => {
-            if (err) {
-                console.error(err.stack);
-                return process.exit(1);
-            }
-            
-       // Create a function to send objects to the queue
-            // Javascript object is converted to JSON and then into a Buffer
-            let sender = (content, next) => {
-                let sent = channel.sendToQueue(config.queue, Buffer.from(JSON.stringify(content)), {
-                    // Don't store queued elements on disk
-                    persistent: false,
-                    contentType: 'application/json'
-                });
-                if (sent) {
-                	ret += '[x] sent: ' + JSON.stringify(content) + '\n';
-                    return next();
-                } else {
-                    channel.once('drain', () => next());
-                }
-            };
-
-            // push 10 messages to queue
-            let sent = 0;
-            let sendNext = () => {
-                if (sent >= 10) {
-                    console.log('All messages sent!');
-                    // Close connection to AMQP server
-                    // We need to call channel.close first, otherwise pending
-                    // messages are not written to the queue
-                    return channel.close(() => connection.close());
-                }
-                sent++;
-                sender({
-                    to: 'recipient-' + sent + '@example.com',
-                    subject: 'Test message #' + sent,
-                    text: 'hello world!'
-                }, sendNext);
-            };
-
-            sendNext();
-
-        });
-    });
-    
-    setTimeout(function() { 
-  connection.close(); 
-  process.exit(0) 
-  }, 500);
-  
-});
-        /************ RabbitMQ ************/
+      let ret = JSON.parse(data);
+      return ret;
   }
