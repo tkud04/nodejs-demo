@@ -21,7 +21,7 @@ express()
                };
   let result = 'Untouched';
   
-  result = sendMail(dt).then((ret) => {console.log(ret); return ret}).catch(console.error);
+  result = sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch(console.error);
    res.render('index',{result: result});  
   })
   
