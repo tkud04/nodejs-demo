@@ -13,13 +13,13 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
-  let data = {receivers: "kkudayisitobi@gmail.com, kudayisitobi@gmail.com",
+  let dt = {receivers: "kkudayisitobi@gmail.com, kudayisitobi@gmail.com",
                  subject: "Nodemailer says HI ?", 
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                };
   
-  result = sendMail.catch(console.error);
+  result = sendMail(dt).catch(console.error);
    res.render('index',{result: result});  
   })
   
