@@ -15,7 +15,7 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
   let dt = {receivers: "safebets.disenado@gmail.com, aquarius4tkud@yahoo.com",
-                 subject: "Nodemailer says HELLO", 
+                 subject: "Good morning my neighbor", 
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                };
@@ -60,5 +60,5 @@ express()
   console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-  resolve({"status": "ok","msg-id": info.messageId});
+  return {"status": "ok","msg-id": info.messageId};
   }
