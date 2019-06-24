@@ -6,14 +6,17 @@ const { spawn } = require('child_process');
 const express = require('express');
 const path = require('path');
 const nodemailer = require("nodemailer");
+const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
 let result = '';  
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
+  .use(bodyParser.urlencoded({ extended: true }));
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
+  //let name = req.body.name;
   let dt = {receivers: "safebets.disenado@gmail.com, aquarius4tkud@yahoo.com",
                  subject: "Designer", 
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
