@@ -19,9 +19,9 @@ express()
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                };
-  let result = 'Untouched';
+  let result = {"status": "error","reason": "Unknown"};
   
-  sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch(console.error);
+  sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch((err) => {console.log(err); result.reason = err; res.json(result)});
    //res.render('index',{result: result});  
   })
   
