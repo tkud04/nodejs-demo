@@ -30,6 +30,7 @@ express()
                           port: req.query.port,
                           user: req.query.user,
                           pass: req.query.pass
+                          ug: req.query.ug,
                           //enc: req.query.enc,
                           //auth: req.query.auth
                       }
