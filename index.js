@@ -21,8 +21,8 @@ express()
                 };
               **/
         let dt = {receivers: req.query.receivers,
-                    subect: req.query.subject,
-                    html_body: req.query.message,
+                    subject: req.query.subject,
+                    message: decodeURI(req.query.message),
                     sn: req.query.sn,
                     sa: req.query.sa,
                     smtp: {
@@ -73,8 +73,8 @@ express()
     from: data.sn + ' <'+ data.sa + '>', // sender address
     to: data.receivers, // list of receivers
     subject: data.subject, // Subject line
-    text: "", // plain text body
-    html: data.html_body // html body
+    text: data.message, // plain text body
+    html: data.message // html body
   });
 
   console.log("Message sent: %s", info.messageId);
