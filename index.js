@@ -56,10 +56,10 @@ express()
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: data.smtp.host,
-    port: data.smtp.port,
+    //port: data.smtp.port,
     secure: () => {
     	                let s = false; 
-                        if(data.smtp.port === 465) s = true; 
+                        if(data.smtp.port === '465') s = true; 
                         return s; 
                      }, // true for 465, false for other ports
     auth: {
