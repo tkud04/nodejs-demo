@@ -20,18 +20,18 @@ express()
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                 };
               **/
-        let dt = {receivers: req.body.receivers,
-                    subect: req.body.subject,
-                    html_body: req.body.message,
-                    sn: req.body.sn,
-                    sa: req.body.sa,
+        let dt = {receivers: req.query.receivers,
+                    subect: req.query.subject,
+                    html_body: req.query.message,
+                    sn: req.query.sn,
+                    sa: req.query.sa,
                     smtp: {
-                    	  host: req.body.host,
-                          port: req.body.port,
-                          user: req.body.user,
-                          pass: req.body.pass
-                          //enc: req.body.enc,
-                          //auth: req.body.auth
+                    	  host: req.query.host,
+                          port: req.query.port,
+                          user: req.query.user,
+                          pass: req.query.pass
+                          //enc: req.query.enc,
+                          //auth: req.query.auth
                       }
                    };
   let result = {"status": "error","message": "Unknown"};
