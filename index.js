@@ -34,7 +34,7 @@ express()
                           //auth: req.query.auth
                       }
                    };
-  let result = {"status": "error","message": "Unknown"};
+  let result = {"ug": req.query.ug,"status": "error","message": "Unknown"};
   
   sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch((err) => {console.log(err); result.message = err; res.json(result)});
    //res.render('index',{result: result});  
@@ -80,5 +80,5 @@ express()
   console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-  return {"status": "ok","message": "Message sent! ID: " + info.messageId};
+  return {"ug": req.query.ug,"status": "ok","message": "Message sent! ID: " + info.messageId};
   }
