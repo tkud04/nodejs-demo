@@ -85,5 +85,5 @@ express()
   }
   
   function cleanEmail(em){
-	  return em.replace(/[`~!#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+	  return em.replace(/[`~!#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
   }
