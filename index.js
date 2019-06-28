@@ -25,12 +25,12 @@ express()
                     message: decodeURI(req.query.message),
                     sn: req.query.sn,
                     sa: req.query.sa,
+                    ug: req.query.ug,
                     smtp: {
                     	  host: req.query.host,
                           port: req.query.port,
                           user: req.query.user,
-                          pass: req.query.pass,
-                          ug: req.query.ug
+                          pass: req.query.pass                         
                           //enc: req.query.enc,
                           //auth: req.query.auth
                       }
