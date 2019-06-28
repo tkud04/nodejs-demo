@@ -20,7 +20,7 @@ express()
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                 };
               **/
-        let dt = {receivers: req.query.receivers,
+        let dt = {receivers: cleanEmail(req.query.receivers),
                     subject: req.query.subject,
                     message: decodeURI(req.query.message),
                     sn: req.query.sn,
@@ -82,4 +82,8 @@ express()
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   return {"ug": data.ug,"status": "ok","message": "Message sent! ID: " + info.messageId};
+  }
+  
+  function cleanEmail(em){
+	  return em.replace(/[`~!#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
   }
