@@ -1,13 +1,25 @@
 'use strict';
 
-const amqplib = require('amqplib/callback_api');
 const config = require('./config');
+const crypto = require('crypto');
 const { spawn } = require('child_process');
 const express = require('express');
 const path = require('path');
 const nodemailer = require("nodemailer");
 const PORT = process.env.PORT || 5000;
 let result = '';  
+
+function base64URLEncode(str) {
+  return str.toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+}
+
+function sha256(buffer) {
+  return crypto.createHash('sha256').update(buffer).digest();
+}
+
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
@@ -19,7 +31,7 @@ express()
                  text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
                  html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
                 };
-              **/
+            
         let dt = {receivers: cleanEmail(req.query.receivers),
                     subject: req.query.subject,
                     message: decodeURI(req.query.message),
@@ -34,11 +46,20 @@ express()
                           //enc: req.query.enc,
                           //auth: req.query.auth
                       }
-                   };
-  let result = {"ug": req.query.ug,"status": "error","message": "Unknown"};
+                   }; 
+                    **/
+  let result = {"status": "ok","message": "Unknown"};
   
-  sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch((err) => {console.log(err); result.message = err; res.json(result)});
+  //sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch((err) => {console.log(err); result.message = err; res.json(result)});
    //res.render('index',{result: result});  
+   res.send(result);
+  })
+  .get('/pkce',(req,res) => {
+    //create code verifier
+    let v = base64URLEncode(crypto.randomBytes(32));
+    //create code challenge
+    let cc = base64URLEncode(sha256(v));
+    res.send({verifier: v, code_challenge: cc});
   })
   
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
