@@ -31,28 +31,6 @@ express()
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }))
   .get('/', (req, res) => {
-  /**let dt = {receivers: "safebets.disenado@gmail.com, aquarius4tkud@yahoo.com",
-                 subject: "Designer", 
-                 text_body: "NodeMailer says HI\nWelcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)",
-                 html_body: "<h3>NodeMailer says HI</h3><p>Welcome to MailNinja, our first bulk SMTP mailer built with NodeJS and of course Laravel 5 :)</p>"
-                };
-            
-        let dt = {receivers: cleanEmail(req.query.receivers),
-                    subject: req.query.subject,
-                    message: decodeURI(req.query.message),
-                    sn: req.query.sn,
-                    sa: req.query.sa,
-                    ug: req.query.ug,
-                    smtp: {
-                    	  host: req.query.host,
-                          port: req.query.port,
-                          user: req.query.user,
-                          pass: req.query.pass                         
-                          //enc: req.query.enc,
-                          //auth: req.query.auth
-                      }
-                   }; 
-                    **/
   let result = {"status": "ok","message": "Unknown"};
   
   //sendMail(dt).then((ret) => {console.log(ret); res.json(ret)}).catch((err) => {console.log(err); result.message = err; res.json(result)});
