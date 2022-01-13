@@ -4,6 +4,7 @@ const config = require('./config');
 const crypto = require('crypto');
 const { spawn } = require('child_process');
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const nodemailer = require("nodemailer");
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,10 @@ express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
+  .use(cors({
+    origin: "*",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }))
   .get('/', (req, res) => {
   /**let dt = {receivers: "safebets.disenado@gmail.com, aquarius4tkud@yahoo.com",
                  subject: "Designer", 
